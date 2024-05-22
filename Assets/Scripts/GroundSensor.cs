@@ -8,9 +8,12 @@ public class GroundSensor : MonoBehaviour
 
     GameManager gameManager;
 
+    public Animator anim;
+
     void Awake()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        anim = GetComponentInParent<Animator>();
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -18,6 +21,7 @@ public class GroundSensor : MonoBehaviour
         if(other.gameObject.layer == 3)
         {
             isGrounded = true;
+            anim.SetBool("IsJumping", false);
         }
         else if(other.gameObject.layer == 6)
         {

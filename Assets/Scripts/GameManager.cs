@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public List<GameObject> enemiesInScreen;
+
     public bool isGameOver;
 
     public Text coinText;
@@ -20,4 +22,22 @@ public class GameManager : MonoBehaviour
         coins++;
         coinText.text = coins.ToString();
     }
+
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            DestroyEnemiesInScreen();
+        }
+    }
+
+    public void DestroyEnemiesInScreen()
+    {
+        foreach (GameObject enemy in enemiesInScreen)
+        {
+            Destroy(enemy);
+        }
+    }
 }
+
+    

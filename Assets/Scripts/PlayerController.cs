@@ -16,6 +16,11 @@ public class PlayerController : MonoBehaviour
     //Variable para acceder al GroundSensor
     private GroundSensor sensor;
 
+    private Animator anim;
+
+    public Transform bulletSpawn;
+    public GameObject bulletPrefab;
+
     //Variable para almacenar el input de movimiento
     float horizontal;
 
@@ -30,7 +35,9 @@ public class PlayerController : MonoBehaviour
         //Buscamos un Objeto por su nombre, cojemos el Componente GroundSensor de este objeto y lo asignamos a la variable
         sensor = GameObject.Find("GroundSensor").GetComponent<GroundSensor>();
         //Buscamos el objeto del GameManager y SFXManager lo asignamos a las variables
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();        
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+        anim = GetComponent<Animator>();        
     }
 
     // Update is called once per frame
@@ -43,18 +50,27 @@ public class PlayerController : MonoBehaviour
             if(horizontal < 0)
             {
                 transform.rotation = Quaternion.Euler(0, 180, 0);
+                anim.SetBool("IsRunning", true);
             }
             else if(horizontal > 0)
             {
                 transform.rotation = Quaternion.Euler(0, 0, 0);
+                anim.SetBool("IsRunning", true);
+            }
+            else
+            {
+                anim.SetBool("IsRunning", false);
             }
 
 
             if(Input.GetButtonDown("Jump") && sensor.isGrounded)
             {
                 rBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                anim.SetBool("IsJumping", true);
             }
         }    
+
+        Shoot();
         
     }
 
@@ -75,6 +91,14 @@ public class PlayerController : MonoBehaviour
         {
             gameManager.AddCoin();
             Destroy(collider.gameObject);
+        }
+    }
+
+    void Shoot()
+    {
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
         }
     }
 }
